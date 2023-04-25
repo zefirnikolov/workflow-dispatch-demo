@@ -1,0 +1,35 @@
+name: Docker Pull and Package Install
+
+on:
+  workflow_dispatch:
+    inputs:
+      image-name:
+        description: "Name of the docker image to pull"
+        required: false
+        type: string
+      image-tag:
+        description: "Tag of the docker image to pull"
+        required: false
+        type: string
+        default: latest
+      package-name:
+        description: "Name of the package to install on the VM"
+        required: true
+        type: string
+
+jobs:
+  pull_docker_image:
+    if: ${{ github.event.inputs.image-name }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull Docker image
+        run: docker pull ${{ github.event.inputs.image-name }}:${{ github.event.inputs.image-tag }}
+
+  install_package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update package index
+        run: sudo apt-get update
+
+      - name: Install package
+        run: sudo apt-get install -y ${{ github.event.inputs.package-name }}
