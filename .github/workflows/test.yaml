@@ -1,0 +1,22 @@
+name: Docker Pull and Package Install
+
+on:
+  workflow_dispatch:
+    inputs:
+      image-name:
+        description: "Name of the docker image to pull"
+        required: true
+        type: string
+      image-tag:
+        description: "Tag of the docker image to pull"
+        required: false
+        type: string
+        default: latest
+
+jobs:
+  pull_docker_image:
+    if: ${{ github.event.inputs.image-name }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull Docker image
+        run: docker pull ${{ github.event.inputs.image-name }}:${{ github.event.inputs.image-tag }}
