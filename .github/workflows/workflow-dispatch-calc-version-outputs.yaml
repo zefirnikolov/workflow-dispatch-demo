@@ -1,4 +1,4 @@
-name: Docker Pull and Package Install
+name: Workflow Dispatch - Calc version and create helm chart
 
 # This is mixed - it gives dynamically on workflow dispatch the stages and not dynamically the other inputs on the reusable workflows
 on:
