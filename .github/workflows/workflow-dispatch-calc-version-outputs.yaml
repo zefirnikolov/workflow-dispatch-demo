@@ -33,7 +33,7 @@ jobs:
       release-version: "0.0.1"
       
   create-helm-chart:
-    needs: [call_workflow]
+    needs: [calc-version]
     uses: zefirnikolov/reusable-pull-image-workflow/.github/workflows/create-helm-chart-artifacts.yaml@main
     with:
       docker-image: ubuntu
