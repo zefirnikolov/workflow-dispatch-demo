@@ -8,11 +8,6 @@ on:
         description: "Do you pull image"
         required: true
         type: boolean
-        default: false
-      create-tag:
-        description: "Do you create tag"
-        required: true
-        type: boolean
         default: true
       stage:
         description: "The stage for tagging Docker image: deve, test, stag, prod."
@@ -29,7 +24,6 @@ jobs:
     uses: zefirnikolov/reusable-pull-image-workflow/.github/workflows/calculate-version-output.yaml@main
     with:
       pull-image: ${{ inputs.pull-image }}
-      create-tag: ${{ inputs.create-tag }}
       docker-image: alpine
       stage: ${{ inputs.stage }}
       release-version: "0.0.1"
