@@ -1,0 +1,41 @@
+name: Workflow Dispatch - Calc version and create helm chart
+
+# This is mixed - it gives dynamically on workflow dispatch the stages and not dynamically the other inputs on the reusable workflows
+on:
+  workflow_dispatch:
+    inputs:
+      pull-image:
+        description: "Do you pull image"
+        required: true
+        type: boolean
+      create-tag:
+        description: "Do you create tag"
+        required: true
+        type: boolean
+      stage:
+        description: "The stage for tagging Docker image: deve, test, stag, prod."
+        required: true
+        type: choice
+        options:
+          - deve
+          - test
+          - stag
+          - prod
+
+jobs:
+  calc-version:
+    uses: zefirnikolov/reusable-pull-image-workflow/.github/workflows/calculate-version-output.yaml@main
+    with:
+      pull-image: ${{ inputs.pull-image }}
+      create-tag: ${{ inputs.create-tag }}
+      docker-image: alpine
+      stage: ${{ inputs.stage }}
+      release-version: "0.0.1"
+      
+  create-helm-chart:
+    needs: [call_workflow]
+    uses: zefirnikolov/reusable-pull-image-workflow/.github/workflows/create-helm-chart-artifacts.yaml@main
+    with:
+      docker-image: ubuntu
+      docker-tag: ${{ needs.calc-version.outputs.DOCKER_TAG }} # To transfer the output from the 1st to the other reusable workflow - It need to want it as an input. And you pass it here...
+      # https://docs.github.com/en/actions/using-workflows/reusing-workflows#using-outputs-from-a-reusable-workflow
