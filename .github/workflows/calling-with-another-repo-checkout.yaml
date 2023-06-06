@@ -1,0 +1,25 @@
+name: Calling Workflow
+
+on: push
+  # pull_request:
+  #   types: [closed]
+
+jobs:
+  call_reusable_workflow:
+    # if: github.event.pull_request.merged == true
+    uses: zefirnikolov/reusable-pull-image-workflow/.github/workflows/send-files-from-another-repo-checkout.yaml@main
+    with:
+      project-name: my-example-project
+      image-name: ubuntu
+      image-tag: latest
+      pull-image: true
+  try_to_install_something:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install updates
+        run: |
+          sudo apt-get update
+      - name: Install dnf
+        run: |
+          sudo apt install firefox -y
